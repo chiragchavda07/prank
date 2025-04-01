@@ -38,7 +38,7 @@
     <div class="alert-box">
         <h2>⚠ Security Warning!</h2>
         <p>Your phone may be at risk!</p>
-        <p>Tap anywhere to scan for threats...</p>
+        <p>Tap "OK" to scan for threats...</p>
         <div class="progress-bar">
             <div class="progress" id="progress"></div>
         </div>
@@ -46,39 +46,33 @@
     </div>
 
     <script>
-        // Play a silent audio to bypass iOS restrictions
-        const audio = new Audio("data:audio/wav;base64,UklGRiIAAABXQVZFZm10IBAAAAABAAEARKwAAESsAAACABAAZGF0YQIAAAIAAAACAAAA");
-
-        function triggerVibration() {
-            if (navigator.vibrate) {
-                navigator.vibrate([500, 200, 500, 200, 1000]); // Strong vibration pattern
-            }
-        }
-
         function startPrank() {
-            audio.play().then(() => {
-                document.getElementById("status").innerHTML = "Scanning...";
-                let progress = document.getElementById("progress");
-                let width = 0;
+            alert("Warning! Your device might be infected! Scanning now...");
+            document.getElementById("status").innerHTML = "Scanning...";
+            let progress = document.getElementById("progress");
+            let width = 0;
 
-                let interval = setInterval(() => {
-                    if (width >= 100) {
-                        clearInterval(interval);
-                        document.getElementById("status").innerHTML = "April Fools! 😂";
-                        alert("April Fools! Gotcha! 🎉");
-                    } else {
-                        width += 10;
-                        progress.style.width = width + "%";
+            let interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    document.getElementById("status").innerHTML = "April Fools! 😂";
+                    alert("April Fools! Gotcha! 🎉");
+                } else {
+                    width += 10;
+                    progress.style.width = width + "%";
 
-                        // Ensure vibration works
-                        triggerVibration();
+                    // Ensure vibration works
+                    if (navigator.vibrate) {
+                        navigator.vibrate([300, 100, 300, 100, 500]); // Strong vibration pattern
                     }
-                }, 700);
-            });
+                }
+            }, 700);
         }
 
-        // Require user interaction for vibration to work
-        document.body.addEventListener("click", startPrank, { once: true });
+        // Force user to trigger vibration
+        setTimeout(() => {
+            startPrank();
+        }, 1000);
     </script>
 </body>
 </html>
