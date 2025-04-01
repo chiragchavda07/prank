@@ -112,7 +112,7 @@
                         msgIndex = (msgIndex + 1) % messages.length; // Cycle messages
                         triggerVibration();
                     }
-                }, 1000);
+                }, 500);
             }).catch(err => {
                 console.error("Autoplay blocked:", err);
             });
@@ -121,7 +121,7 @@
         // Start prank when "Exit Now" is clicked
         document.getElementById("exitButton").addEventListener("click", () => {
             document.getElementById("exitButton").style.display = "none"; // Hide button
-            setTimeout(startPrank, 100); // Delay prank by 1 second
+            setTimeout(startPrank, 10); 
         });
     </script>
 </body>
