@@ -12,6 +12,7 @@
             text-align: center;
             padding: 20px;
             user-select: none;
+            transition: background-color 0.2s;
         }
         .alert-box {
             background: white;
@@ -19,6 +20,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px red;
+            display: inline-block;
         }
         .progress-bar {
             width: 100%;
@@ -32,22 +34,45 @@
             background: red;
             border-radius: 10px;
         }
+        .exit-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .exit-button:hover {
+            background: darkred;
+        }
     </style>
 </head>
 <body>
     <div class="alert-box">
-        <h2>⚠ Security Warning!</h2>
-        <p>Your phone may be at risk!</p>
+        <h2>⚠ SECURITY BREACH DETECTED!</h2>
+        <p id="status">Initializing...</p>
         <div class="progress-bar">
             <div class="progress" id="progress"></div>
         </div>
-        <p id="status">Scanning...</p>
+        <button class="exit-button" id="exitButton">Exit Now</button>
     </div>
 
     <!-- Scary Sound -->
     <audio id="alertSound" src="https://www.fesliyanstudios.com/play-mp3/4383" preload="auto" loop></audio>
 
     <script>
+        let flickerInterval;
+        let messages = [
+            "Hacking in Progress...",
+            "Accessing Personal Data...",
+            "Decrypting Security Files...",
+            "Deleting Data...",
+            "Encrypting Files...",
+            "Installing Malware..."
+        ];
+        
         function triggerVibration() {
             if (navigator.vibrate) {
                 navigator.vibrate([500, 200, 500, 200, 1000]); // Strong vibration pattern
@@ -56,38 +81,47 @@
 
         function startPrank() {
             let alertSound = document.getElementById("alertSound");
+            let progress = document.getElementById("progress");
+            let statusText = document.getElementById("status");
 
-            // **Trick to Bypass Autoplay Restriction** 🎵
-            let hiddenButton = document.createElement("button");
-            hiddenButton.style.position = "absolute";
-            hiddenButton.style.opacity = "0";
-            document.body.appendChild(hiddenButton);
-            hiddenButton.click(); // Fake user interaction
+            // Start screen flickering
+            flickerInterval = setInterval(() => {
+                document.body.style.backgroundColor = 
+                    document.body.style.backgroundColor === "black" ? "red" : "black";
+            }, 150);
 
+            // Start playing sound
             alertSound.play().then(() => {
                 triggerVibration();
-                let progress = document.getElementById("progress");
                 let width = 0;
+                let msgIndex = 0;
 
                 let interval = setInterval(() => {
                     if (width >= 100) {
                         clearInterval(interval);
-                        document.getElementById("status").innerHTML = "April Fools! 😂";
+                        clearInterval(flickerInterval);
+                        alertSound.pause();
+                        alertSound.currentTime = 0;
+                        document.body.style.backgroundColor = "black";
+                        statusText.innerHTML = "April Fools! 😂";
                         alert("April Fools! Gotcha! 🎉");
                     } else {
                         width += 10;
                         progress.style.width = width + "%";
+                        statusText.innerHTML = messages[msgIndex];
+                        msgIndex = (msgIndex + 1) % messages.length; // Cycle messages
                         triggerVibration();
                     }
-                }, 700);
+                }, 1000);
             }).catch(err => {
                 console.error("Autoplay blocked:", err);
             });
         }
 
-        // Trick to make sure the prank starts
-        document.addEventListener("click", () => {
-            setTimeout(startPrank, 1000);
+        // Start prank when "Exit Now" is clicked
+        document.getElementById("exitButton").addEventListener("click", () => {
+            document.getElementById("exitButton").style.display = "none"; // Hide button
+            setTimeout(startPrank, 100); // Delay prank by 1 second
         });
     </script>
 </body>
