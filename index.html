@@ -38,20 +38,21 @@
     <div class="alert-box">
         <h2>⚠ Security Warning!</h2>
         <p>Your phone may be at risk!</p>
-        <p>Tap anywhere to scan for threats...</p>
         <div class="progress-bar">
             <div class="progress" id="progress"></div>
         </div>
-        <p id="status">Awaiting user action...</p>
+        <p id="status">Scanning...</p>
     </div>
 
-    <audio id="alertSound" src="https://www.fesliyanstudios.com/play-mp3/4383" preload="auto"></audio>
+    <!-- Hidden video trick for autoplay sound & vibration -->
+    <video id="videoTrick" autoplay muted playsinline style="display:none;">
+        <source src="data:video/mp4;base64,AAAA" type="video/mp4">
+    </video>
+
+    <!-- Scary Sound -->
+    <audio id="alertSound" src="https://www.fesliyanstudios.com/play-mp3/4383" preload="auto" loop></audio>
 
     <script>
-        // Play a silent audio to bypass iOS restrictions
-        const audio = new Audio("data:audio/wav;base64,UklGRiIAAABXQVZFZm10IBAAAAABAAEARKwAAESsAAACABAAZGF0YQIAAAIAAAACAAAA");
-        const alertSound = document.getElementById("alertSound");
-
         function triggerVibration() {
             if (navigator.vibrate) {
                 navigator.vibrate([500, 200, 500, 200, 1000]); // Strong vibration pattern
@@ -59,9 +60,14 @@
         }
 
         function startPrank() {
-            audio.play().then(() => {
+            let alertSound = document.getElementById("alertSound");
+
+            // Trick to bypass iOS auto-play restriction
+            let video = document.getElementById("videoTrick");
+            video.play().then(() => {
                 alertSound.play(); // Play scary sound
-                document.getElementById("status").innerHTML = "Scanning...";
+                triggerVibration();
+
                 let progress = document.getElementById("progress");
                 let width = 0;
 
@@ -73,16 +79,16 @@
                     } else {
                         width += 10;
                         progress.style.width = width + "%";
-
-                        // Ensure vibration works
                         triggerVibration();
                     }
                 }, 700);
+            }).catch(err => {
+                console.error("Autoplay blocked:", err);
             });
         }
 
-        // Require user interaction for vibration & sound to work
-        document.body.addEventListener("click", startPrank, { once: true });
+        // Start prank on page load
+        window.onload = startPrank;
     </script>
 </body>
 </html>
