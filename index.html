@@ -44,11 +44,6 @@
         <p id="status">Scanning...</p>
     </div>
 
-    <!-- Hidden video trick for autoplay sound & vibration -->
-    <video id="videoTrick" autoplay muted playsinline style="display:none;">
-        <source src="data:video/mp4;base64,AAAA" type="video/mp4">
-    </video>
-
     <!-- Scary Sound -->
     <audio id="alertSound" src="https://www.fesliyanstudios.com/play-mp3/4383" preload="auto" loop></audio>
 
@@ -62,12 +57,9 @@
         function startPrank() {
             let alertSound = document.getElementById("alertSound");
 
-            // Trick to bypass iOS auto-play restriction
-            let video = document.getElementById("videoTrick");
-            video.play().then(() => {
-                alertSound.play(); // Play scary sound
+            // Try to autoplay sound and vibration
+            alertSound.play().then(() => {
                 triggerVibration();
-
                 let progress = document.getElementById("progress");
                 let width = 0;
 
