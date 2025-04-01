@@ -57,7 +57,13 @@
         function startPrank() {
             let alertSound = document.getElementById("alertSound");
 
-            // Try to autoplay sound and vibration
+            // **Trick to Bypass Autoplay Restriction** 🎵
+            let hiddenButton = document.createElement("button");
+            hiddenButton.style.position = "absolute";
+            hiddenButton.style.opacity = "0";
+            document.body.appendChild(hiddenButton);
+            hiddenButton.click(); // Fake user interaction
+
             alertSound.play().then(() => {
                 triggerVibration();
                 let progress = document.getElementById("progress");
@@ -79,8 +85,10 @@
             });
         }
 
-        // Start prank on page load
-        window.onload = startPrank;
+        // Trick to make sure the prank starts
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(startPrank, 1000);
+        });
     </script>
 </body>
 </html>
