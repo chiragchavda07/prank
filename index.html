@@ -13,12 +13,13 @@
     <meta name="twitter:card" content="summary_large_image">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(120deg, #2c3e50, #4ca1af);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #000000, #0f0f0f);
             color: white;
             text-align: center;
             padding: 20px;
             transition: background-color 0.2s;
+            overflow: hidden;
         }
         .container {
             display: flex;
@@ -31,47 +32,64 @@
         .hidden {
             display: none;
         }
-        .nature-image {
-            width: 80%;
-            max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
-            transition: transform 0.5s, filter 0.5s;
-        }
-        .nature-image:hover {
-            transform: scale(1.05);
-            filter: brightness(1.2);
-        }
-        .banner {
-            background: linear-gradient(45deg, #ff5733, #c70039);
-            color: white;
-            padding: 20px;
-            font-size: 22px;
+        .glow-title {
+            font-size: 50px;
             font-weight: bold;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(255, 75, 75, 0.7);
-            margin-bottom: 20px;
-            animation: pulse 1.5s infinite alternate;
+            text-transform: uppercase;
+            color: cyan;
+            text-shadow: 0 0 20px cyan, 0 0 40px blue;
+            animation: flickerGlow 1.5s infinite alternate;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
+        @keyframes flickerGlow {
+            0% { opacity: 1; text-shadow: 0 0 20px cyan, 0 0 40px blue; }
+            100% { opacity: 0.8; text-shadow: 0 0 15px cyan, 0 0 30px blue; }
+        }
+        .neon-text {
+            font-size: 18px;
+            background: transparent;
+            padding: 25px;
+            text-shadow: 0 0 15px cyan;
         }
         .tap-button {
-            margin-top: 20px;
-            padding: 14px 30px;
-            font-size: 20px;
-            background: #28a745;
-            color: white;
+            margin-top: 25px;
+            padding: 16px 35px;
+            font-size: 22px;
+            font-weight: bold;
+            background: cyan;
+            color: black;
             border: none;
             cursor: pointer;
-            border-radius: 8px;
-            transition: background 0.3s, transform 0.2s;
-            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.5);
+            border-radius: 10px;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.6);
         }
         .tap-button:hover {
-            background: #218838;
-            transform: scale(1.15);
+            background: #00ffff;
+            transform: scale(1.2);
+            box-shadow: 0 8px 25px rgba(0, 255, 255, 0.8);
+        }
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        .floating-icons span {
+            position: absolute;
+            display: block;
+            width: 10px;
+            height: 10px;
+            background: cyan;
+            box-shadow: 0 0 10px cyan;
+            border-radius: 50%;
+            animation: floatIcons linear infinite;
+        }
+        @keyframes floatIcons {
+            from { transform: translateY(100vh); }
+            to { transform: translateY(-10vh); }
         }
         /* Matrix Effect */
         .matrix {
@@ -115,12 +133,26 @@
     </style>
 </head>
 <body>
-    <div class="container" id="naturePage">
+    <!-- <div class="container" id="naturePage">
         <div class="banner">🌿 Experience the Breathtaking Wonders of Nature! Tap Below to Reveal More! 🌿</div>
         <img src="https://chirag-chavda3004.vercel.app/preview.jpg" alt="Beautiful Nature" class="nature-image">
         <button class="tap-button" id="startPrankButton">Unlock Secret Nature</button>
+    </div> -->
+    <div class="container" id="naturePage">
+        <div class="glow-title">Unlock the Hidden Nature</div>
+        <div class="neon-text">Tap below to experience a new dimension of nature!</div>
+        <button class="tap-button" id="startPrankButton">Reveal the Mystery</button>
     </div>
-    
+    <div class="floating-icons">
+        <script>
+            for (let i = 0; i < 50; i++) {
+                let span = document.createElement("span");
+                span.style.left = Math.random() * 100 + "vw";
+                span.style.animationDuration = Math.random() * 5 + 3 + "s";
+                document.querySelector(".floating-icons").appendChild(span);
+            }
+        </script>
+    </div>
     <div class="matrix" id="matrixEffect"></div>
     
     <div class="container hidden" id="prankPage">
