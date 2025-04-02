@@ -54,12 +54,8 @@
             animation: pulse 1.5s infinite alternate;
         }
         @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            100% {
-                transform: scale(1.05);
-            }
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
         }
         .tap-button {
             margin-top: 20px;
@@ -77,32 +73,112 @@
             background: #218838;
             transform: scale(1.15);
         }
+        /* Matrix Effect */
+        .matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 16px;
+            overflow: hidden;
+            display: none;
+        }
+        /* April Fools Message */
+        .april-fools {
+            font-size: 32px;
+            color: yellow;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: blink 1s infinite alternate;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
-    <!-- Initial Nature Page -->
     <div class="container" id="naturePage">
         <div class="banner">🌿 Experience the Breathtaking Wonders of Nature! Tap Below to Reveal More! 🌿</div>
-        <img src="https://chirag-chavda3004.vercel.app/preview.jpg" alt="Beautiful Nature" class="nature-image" id="natureImage">
-        <button class="tap-button" id="startPrankButton">Reveal Hidden Beauty</button>
+        <img src="https://chirag-chavda3004.vercel.app/preview.jpg" alt="Beautiful Nature" class="nature-image">
+        <button class="tap-button" id="startPrankButton">Unlock Secret Nature</button>
+    </div>
+    
+    <div class="matrix" id="matrixEffect"></div>
+    
+    <div class="container hidden" id="prankPage">
+        <!-- <div class="alert-box">
+            <h2>⚠ SECURITY BREACH DETECTED!</h2>
+            <p id="status">Initializing...</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div> -->
+        <div class="april-fools hidden" id="aprilFoolsMessage">APRIL FOOLS! 😂🎉</div>
     </div>
 
+    <audio id="alertSound" src="https://www.fesliyanstudios.com/play-mp3/4383" preload="auto" loop></audio>
+
     <script>
-        let flickerEffect;
-        function startFlickering() {
-            flickerEffect = setInterval(() => {
-                document.getElementById("natureImage").style.filter =
-                    document.getElementById("natureImage").style.filter === "brightness(1)" ? "brightness(1.5)" : "brightness(1)";
-            }, 150);
+        function startMatrixEffect() {
+            const matrix = document.getElementById("matrixEffect");
+            matrix.style.display = "block";
+            const columns = Math.floor(window.innerWidth / 10);
+            let matrixText = "";
+            for (let i = 0; i < columns * 50; i++) {
+                matrixText += Math.random() > 0.5 ? "1 " : "0 ";
+                if (i % columns === 0) matrixText += "<br>";
+            }
+            matrix.innerHTML = matrixText;
+            setInterval(() => {
+                let newText = "";
+                for (let i = 0; i < columns * 50; i++) {
+                    newText += Math.random() > 0.5 ? "1 " : "0 ";
+                    if (i % columns === 0) newText += "<br>";
+                }
+                matrix.innerHTML = newText;
+            }, 100);
         }
 
-        document.getElementById("startPrankButton").addEventListener("click", () => {
-            startFlickering();
-            setTimeout(() => {
-                clearInterval(flickerEffect);
-                document.getElementById("natureImage").style.filter = "brightness(1)";
-            }, 3000);
-        });
+        function startPrank() {
+            document.getElementById("naturePage").classList.add("hidden");
+            document.getElementById("prankPage").classList.remove("hidden");
+            startMatrixEffect();
+            let alertSound = document.getElementById("alertSound");
+            let progress = document.getElementById("progress");
+            let statusText = document.getElementById("status");
+            let width = 0;
+            let messages = [
+                "Hacking in Progress...",
+                "Accessing Personal Data...",
+                "Decrypting Security Files...",
+                "Deleting Data...",
+                "Encrypting Files...",
+                "Installing Malware..."
+            ];
+            let msgIndex = 0;
+            alertSound.play();
+
+            let interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    document.getElementById("matrixEffect").style.display = "none";
+                    alertSound.pause();
+                    document.getElementById("aprilFoolsMessage").classList.remove("hidden");
+                } else {
+                    width += 10;
+                    progress.style.width = width + "%";
+                    statusText.innerHTML = messages[msgIndex];
+                    msgIndex = (msgIndex + 1) % messages.length;
+                }
+            }, 500);
+        }
+
+        document.getElementById("startPrankButton").addEventListener("click", startPrank);
     </script>
 </body>
 </html>
