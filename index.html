@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nature Photos by Chirag</title>
-
+    <title>Unlock the Hidden Beauty of Nature</title>
+    
     <!-- Meta Tags for Preview -->
-    <meta property="og:title" content="Nature Photos by Chirag">
-    <meta property="og:description" content="A beautiful collection of nature photography by Chirag.">
+    <meta property="og:title" content="Unlock the Hidden Beauty of Nature">
+    <meta property="og:description" content="Discover mesmerizing landscapes and breathtaking scenery. Tap to unveil a world of nature like never before!">
     <meta property="og:image" content="https://chirag-chavda3004.vercel.app/preview.jpg">
     <meta property="og:url" content="https://chirag-chavda3004.vercel.app">
     <meta name="twitter:card" content="summary_large_image">
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -193,6 +192,8 @@
                         clearInterval(flickerInterval);
                         alertSound.pause();
                         aprilfool.play();
+                        let aprilFoolSong = document.getElementById("aprilfool");
+                        aprilFoolSong.muted = false; 
                         document.getElementById("matrixEffect").style.display = "none";
                         document.getElementById("alertBox").style.display = "none";
                         document.getElementById("aprilFoolsMessage").classList.remove("hidden");
