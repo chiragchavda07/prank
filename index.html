@@ -9,18 +9,46 @@
     <meta property="og:title" content="Nature Photos by Chirag">
     <meta property="og:description" content="A beautiful collection of nature photography by Chirag.">
     <meta property="og:image" content="https://chirag-chavda3004.vercel.app/preview.jpg">
-    <meta property="og:url" content="https://https://chirag-chavda3004.vercel.app">
+    <meta property="og:url" content="https://chirag-chavda3004.vercel.app">
     <meta name="twitter:card" content="summary_large_image">
 
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: black;
-            color: red;
+            color: white;
             text-align: center;
             padding: 20px;
-            user-select: none;
             transition: background-color 0.2s;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .hidden {
+            display: none;
+        }
+        .nature-image {
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px white;
+        }
+        .tap-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .tap-button:hover {
+            background: darkgreen;
         }
         .alert-box {
             background: white;
@@ -42,29 +70,24 @@
             background: red;
             border-radius: 10px;
         }
-        .exit-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background: red;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .exit-button:hover {
-            background: darkred;
-        }
     </style>
 </head>
 <body>
-    <div class="alert-box">
-        <h2>⚠ SECURITY BREACH DETECTED!</h2>
-        <p id="status">Initializing...</p>
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
+    <!-- Initial Nature Page -->
+    <div class="container" id="naturePage">
+        <img src="https://chirag-chavda3004.vercel.app/preview.jpg" alt="Beautiful Nature" class="nature-image">
+        <button class="tap-button" id="startPrankButton">Tap to make this image live</button>
+    </div>
+
+    <!-- Prank Page (Initially Hidden) -->
+    <div class="container hidden" id="prankPage">
+        <div class="alert-box">
+            <h2>⚠ SECURITY BREACH DETECTED!</h2>
+            <p id="status">Initializing...</p>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
         </div>
-        <button class="exit-button" id="exitButton">Exit Now</button>
     </div>
 
     <!-- Scary Sound -->
@@ -88,6 +111,9 @@
         }
 
         function startPrank() {
+            document.getElementById("naturePage").classList.add("hidden");
+            document.getElementById("prankPage").classList.remove("hidden");
+
             let alertSound = document.getElementById("alertSound");
             let progress = document.getElementById("progress");
             let statusText = document.getElementById("status");
@@ -97,8 +123,7 @@
                 document.body.style.backgroundColor = 
                     document.body.style.backgroundColor === "black" ? "red" : "black";
             }, 150);
-
-            // Start playing sound
+            
             alertSound.play().then(() => {
                 triggerVibration();
                 let width = 0;
@@ -117,7 +142,7 @@
                         width += 10;
                         progress.style.width = width + "%";
                         statusText.innerHTML = messages[msgIndex];
-                        msgIndex = (msgIndex + 1) % messages.length; // Cycle messages
+                        msgIndex = (msgIndex + 1) % messages.length;
                         triggerVibration();
                     }
                 }, 500);
@@ -126,11 +151,7 @@
             });
         }
 
-        // Start prank when "Exit Now" is clicked
-        document.getElementById("exitButton").addEventListener("click", () => {
-            document.getElementById("exitButton").style.display = "none"; // Hide button
-            setTimeout(startPrank, 10); 
-        });
+        document.getElementById("startPrankButton").addEventListener("click", startPrank);
     </script>
 </body>
 </html>
