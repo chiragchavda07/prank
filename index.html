@@ -27,6 +27,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            position: relative;
         }
         .hidden {
             display: none;
@@ -85,7 +86,20 @@
             font-family: monospace;
             font-size: 16px;
             overflow: hidden;
+            z-index: 1;
             display: none;
+        }
+        /* Alert Box Above Matrix */
+        .alert-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px red;
+            z-index: 2;
         }
         /* April Fools Message */
         .april-fools {
@@ -111,18 +125,19 @@
     <div class="matrix" id="matrixEffect"></div>
     
     <div class="container hidden" id="prankPage">
-        <!-- <div class="alert-box">
+        <div class="alert-box" id="alertBox">
             <h2>⚠ SECURITY BREACH DETECTED!</h2>
             <p id="status">Initializing...</p>
             <div class="progress-bar">
                 <div class="progress" id="progress"></div>
             </div>
-        </div> -->
+        </div>
         <div class="april-fools hidden" id="aprilFoolsMessage">APRIL FOOLS! 😂🎉</div>
     </div>
 
     <audio id="alertSound" src="https://www.fesliyanstudios.com/play-mp3/4383" preload="auto" loop></audio>
-
+    <audio id="aprilfool" src="https://chirag-chavda3004.vercel.app/april-fool.mp3" preload="auto" loop></audio>
+    <!-- <audio id="aprilfool" src="april-fool.mp3" preload="auto" loop></audio> -->
     <script>
         function startMatrixEffect() {
             const matrix = document.getElementById("matrixEffect");
@@ -144,6 +159,12 @@
             }, 100);
         }
 
+        function triggerVibration() {
+            if (navigator.vibrate) {
+                navigator.vibrate([500, 200, 500, 200, 1000]); // Strong vibration pattern
+            }
+        }
+
         function startPrank() {
             document.getElementById("naturePage").classList.add("hidden");
             document.getElementById("prankPage").classList.remove("hidden");
@@ -151,31 +172,41 @@
             let alertSound = document.getElementById("alertSound");
             let progress = document.getElementById("progress");
             let statusText = document.getElementById("status");
-            let width = 0;
-            let messages = [
-                "Hacking in Progress...",
-                "Accessing Personal Data...",
-                "Decrypting Security Files...",
-                "Deleting Data...",
-                "Encrypting Files...",
-                "Installing Malware..."
-            ];
-            let msgIndex = 0;
-            alertSound.play();
-
-            let interval = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(interval);
-                    document.getElementById("matrixEffect").style.display = "none";
-                    alertSound.pause();
-                    document.getElementById("aprilFoolsMessage").classList.remove("hidden");
-                } else {
-                    width += 10;
-                    progress.style.width = width + "%";
-                    statusText.innerHTML = messages[msgIndex];
-                    msgIndex = (msgIndex + 1) % messages.length;
-                }
-            }, 500);
+            flickerInterval = setInterval(() => {
+                document.getElementById("matrixEffect").style.backgroundColor = document.getElementById("matrixEffect").style.backgroundColor === "black" ? "red" : "black";
+            }, 140);
+            alertSound.play().then(()=>{
+                triggerVibration();
+                let width = 0;
+                let messages = [
+                    "Hacking in Progress...",
+                    "Accessing Personal Data...",
+                    "Decrypting Security Files...",
+                    "Deleting Data...",
+                    "Encrypting Files...",
+                    "Installing Malware..."
+                ];
+                let msgIndex = 0;
+                let interval = setInterval(() => {
+                    if (width >= 100) {
+                        clearInterval(interval);
+                        clearInterval(flickerInterval);
+                        alertSound.pause();
+                        aprilfool.play();
+                        document.getElementById("matrixEffect").style.display = "none";
+                        document.getElementById("alertBox").style.display = "none";
+                        document.getElementById("aprilFoolsMessage").classList.remove("hidden");
+                    } else {
+                        width += 10;
+                        progress.style.width = width + "%";
+                        statusText.innerHTML = messages[msgIndex];
+                        msgIndex = (msgIndex + 1) % messages.length;
+                        triggerVibration();
+                    }
+                }, 300);
+            }).catch(err => {
+                console.error("Autoplay blocked:", err);
+            });
         }
 
         document.getElementById("startPrankButton").addEventListener("click", startPrank);
