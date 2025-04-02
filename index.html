@@ -15,7 +15,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: black;
+            background: linear-gradient(120deg, #2c3e50, #4ca1af);
             color: white;
             text-align: center;
             padding: 20px;
@@ -35,123 +35,74 @@
             width: 80%;
             max-width: 600px;
             border-radius: 10px;
-            box-shadow: 0 0 10px white;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+            transition: transform 0.5s, filter 0.5s;
+        }
+        .nature-image:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+        .banner {
+            background: linear-gradient(45deg, #ff5733, #c70039);
+            color: white;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 75, 75, 0.7);
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite alternate;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.05);
+            }
         }
         .tap-button {
             margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 18px;
-            background: green;
+            padding: 14px 30px;
+            font-size: 20px;
+            background: #28a745;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.5);
         }
         .tap-button:hover {
-            background: darkgreen;
-        }
-        .alert-box {
-            background: white;
-            color: black;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px red;
-            display: inline-block;
-        }
-        .progress-bar {
-            width: 100%;
-            background-color: grey;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-        .progress {
-            height: 10px;
-            width: 0;
-            background: red;
-            border-radius: 10px;
+            background: #218838;
+            transform: scale(1.15);
         }
     </style>
 </head>
 <body>
     <!-- Initial Nature Page -->
     <div class="container" id="naturePage">
-        <img src="https://chirag-chavda3004.vercel.app/preview.jpg" alt="Beautiful Nature" class="nature-image">
-        <button class="tap-button" id="startPrankButton">Tap to make this image live</button>
+        <div class="banner">🌿 Experience the Breathtaking Wonders of Nature! Tap Below to Reveal More! 🌿</div>
+        <img src="https://chirag-chavda3004.vercel.app/preview.jpg" alt="Beautiful Nature" class="nature-image" id="natureImage">
+        <button class="tap-button" id="startPrankButton">Reveal Hidden Beauty</button>
     </div>
-
-    <!-- Prank Page (Initially Hidden) -->
-    <div class="container hidden" id="prankPage">
-        <div class="alert-box">
-            <h2>⚠ SECURITY BREACH DETECTED!</h2>
-            <p id="status">Initializing...</p>
-            <div class="progress-bar">
-                <div class="progress" id="progress"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scary Sound -->
-    <audio id="alertSound" src="https://www.fesliyanstudios.com/play-mp3/4383" preload="auto" loop></audio>
 
     <script>
-        let flickerInterval;
-        let messages = [
-            "Hacking in Progress...",
-            "Accessing Personal Data...",
-            "Decrypting Security Files...",
-            "Deleting Data...",
-            "Encrypting Files...",
-            "Installing Malware..."
-        ];
-        
-        function triggerVibration() {
-            if (navigator.vibrate) {
-                navigator.vibrate([500, 200, 500, 200, 1000]); // Strong vibration pattern
-            }
-        }
-
-        function startPrank() {
-            document.getElementById("naturePage").classList.add("hidden");
-            document.getElementById("prankPage").classList.remove("hidden");
-
-            let alertSound = document.getElementById("alertSound");
-            let progress = document.getElementById("progress");
-            let statusText = document.getElementById("status");
-
-            // Start screen flickering
-            flickerInterval = setInterval(() => {
-                document.body.style.backgroundColor = 
-                    document.body.style.backgroundColor === "black" ? "red" : "black";
+        let flickerEffect;
+        function startFlickering() {
+            flickerEffect = setInterval(() => {
+                document.getElementById("natureImage").style.filter =
+                    document.getElementById("natureImage").style.filter === "brightness(1)" ? "brightness(1.5)" : "brightness(1)";
             }, 150);
-            
-            alertSound.play().then(() => {
-                triggerVibration();
-                let width = 0;
-                let msgIndex = 0;
-
-                let interval = setInterval(() => {
-                    if (width >= 100) {
-                        clearInterval(interval);
-                        clearInterval(flickerInterval);
-                        alertSound.pause();
-                        alertSound.currentTime = 0;
-                        document.body.style.backgroundColor = "black";
-                        statusText.innerHTML = "April Fools! 😂";
-                        alert("April Fools! Gotcha! 🎉");
-                    } else {
-                        width += 10;
-                        progress.style.width = width + "%";
-                        statusText.innerHTML = messages[msgIndex];
-                        msgIndex = (msgIndex + 1) % messages.length;
-                        triggerVibration();
-                    }
-                }, 500);
-            }).catch(err => {
-                console.error("Autoplay blocked:", err);
-            });
         }
 
-        document.getElementById("startPrankButton").addEventListener("click", startPrank);
+        document.getElementById("startPrankButton").addEventListener("click", () => {
+            startFlickering();
+            setTimeout(() => {
+                clearInterval(flickerEffect);
+                document.getElementById("natureImage").style.filter = "brightness(1)";
+            }, 3000);
+        });
     </script>
 </body>
 </html>
